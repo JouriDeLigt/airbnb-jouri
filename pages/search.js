@@ -3,11 +3,20 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { format } from "date-fns";
 import InfoCard from "../components/InfoCard";
+import { MenuAlt1Icon } from "@heroicons/react/solid";
+import getUnixTime from "date-fns/getUnixTime";
+import differenceInDays from "date-fns/differenceInDays";
 
-function Search({ searchResults }) {
+function Search({ searchResults, wpApiResults }) {
+  console.log(wpApiResults);
+  // var wpApiResults = wpApiResults[0].title.rendered;
+  // console.log(wpApiResults);
+
   const router = useRouter();
   //   ES6 Deconstructuring
   const { location, startDate, endDate, noOfGuests } = router.query;
+
+  const noOfDays = differenceInDays(new Date(endDate), new Date(startDate));
 
   const formattedStartDate = format(new Date(startDate), "dd MMMM yyyy");
   const formattedEndDate = format(new Date(endDate), "dd MMMM yyyy");
@@ -36,12 +45,31 @@ function Search({ searchResults }) {
           </div>
 
           <div className="flex flex-col">
-            {searchResults?.map(
+            {wpApiResults?.map((item) => (
+              <InfoCard
+                key={item.id}
+                img={item["toolset-meta"]["field-group-for-stays"].img.raw}
+                location={
+                  item["toolset-meta"]["field-group-for-stays"].location.raw
+                }
+                title={item.title.rendered}
+                star={item["toolset-meta"]["field-group-for-stays"].star.raw}
+                description={
+                  item["toolset-meta"]["field-group-for-stays"].description.raw
+                }
+                price={item["toolset-meta"]["field-group-for-stays"].price.raw}
+                total={
+                  item["toolset-meta"]["field-group-for-stays"].price.raw *
+                  noOfDays
+                }
+              />
+            ))}
+            {/* {searchResults?.map(
               ({ img, location, title, description, star, price, total }) => (
                 <InfoCard
                   key={img}
                   img={img}
-                  location={location}
+                  location={wpApiResults}
                   title={title}
                   description={description}
                   star={star}
@@ -49,7 +77,7 @@ function Search({ searchResults }) {
                   total={total}
                 />
               )
-            )}
+            )} */}
           </div>
         </section>
       </main>
@@ -66,9 +94,14 @@ export async function getServerSideProps() {
     (res) => res.json()
   );
 
+  const wpApiResults = await fetch(
+    "https://airbnb-clone.codeligtdev.nl/wp-json/wp/v2/stay"
+  ).then((res) => res.json());
+
   return {
     props: {
       searchResults,
+      wpApiResults,
     },
   };
 }
