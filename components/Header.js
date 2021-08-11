@@ -29,15 +29,17 @@ function Header({ placeholder }) {
   };
 
   const search = () => {
-    router.push({
-      pathname: "/search",
-      query: {
-        location: searchInput,
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
-        noOfGuests,
-      },
-    });
+    router
+      .push({
+        pathname: "/search",
+        query: {
+          location: searchInput,
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+          noOfGuests,
+        },
+      })
+      .then(resetInput);
   };
 
   const selectionRange = {
