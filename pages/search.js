@@ -6,6 +6,7 @@ import InfoCard from "../components/InfoCard";
 import { MenuAlt1Icon } from "@heroicons/react/solid";
 import getUnixTime from "date-fns/getUnixTime";
 import differenceInDays from "date-fns/differenceInDays";
+import Map from "../components/Map";
 
 function Search({ searchResults, wpApiResults }) {
   console.log(wpApiResults);
@@ -79,6 +80,10 @@ function Search({ searchResults, wpApiResults }) {
               )
             )} */}
           </div>
+        </section>
+
+        <section className="hidden xl:inline-flex xl:min-w-[600px]">
+          <Map wpApiResults={wpApiResults} />
         </section>
       </main>
 
