@@ -9,7 +9,7 @@ import differenceInDays from "date-fns/differenceInDays";
 import Map from "../components/Map";
 
 function Search({ searchResults, wpApiResults }) {
-  console.log(wpApiResults);
+  // console.log(wpApiResults);
   // var wpApiResults = wpApiResults[0].title.rendered;
   // console.log(wpApiResults);
 
@@ -46,7 +46,7 @@ function Search({ searchResults, wpApiResults }) {
           </div>
 
           <div className="flex flex-col">
-            {wpApiResults?.map((item) => (
+            {/* {wpApiResults?.map((item) => (
               <InfoCard
                 key={item.id}
                 img={item["toolset-meta"]["field-group-for-stays"].img.raw}
@@ -64,8 +64,8 @@ function Search({ searchResults, wpApiResults }) {
                   noOfDays
                 }
               />
-            ))}
-            {/* {searchResults?.map(
+              ))} */}
+            {searchResults?.map(
               ({ img, location, title, description, star, price, total }) => (
                 <InfoCard
                   key={img}
@@ -78,7 +78,7 @@ function Search({ searchResults, wpApiResults }) {
                   total={total}
                 />
               )
-            )} */}
+            )}
           </div>
         </section>
 
@@ -99,9 +99,9 @@ export async function getServerSideProps() {
     (res) => res.json()
   );
 
-  const wpApiResults = await fetch(
-    "https://airbnb-clone.codeligtdev.nl/wp-json/wp/v2/stay"
-  ).then((res) => res.json());
+  // const wpApiResults = await fetch(
+  //   "https://airbnb-clone.codeligtdev.nl/wp-json/wp/v2/stay"
+  // ).then((res) => res.json());
 
   return {
     props: {
