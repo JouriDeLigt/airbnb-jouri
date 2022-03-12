@@ -2,11 +2,11 @@ import { useState } from "react";
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import getCenter from "geolib/es/getCenter";
 
-function Map({ wpApiResults }) {
+function Map({ searchResults }) {
   const [selectedLocation, setSelectedLocation] = useState({});
-  const coordinates = wpApiResults.map((result) => ({
-    longitude: result["toolset-meta"]["field-group-for-stays"].long.raw,
-    latitude: result["toolset-meta"]["field-group-for-stays"].lat.raw,
+  const coordinates = searchResults.map((result) => ({
+    longitude: result.long,
+    latitude: result.lat,
   }));
 
   const center = getCenter(coordinates);
@@ -19,6 +19,7 @@ function Map({ wpApiResults }) {
     zoom: 11,
   });
   console.log(selectedLocation);
+
   return (
     <ReactMapGL
       mapStyle="mapbox://styles/jaaylight/cktivkwfo6lft17p5vo37blr9"
@@ -26,15 +27,11 @@ function Map({ wpApiResults }) {
       {...viewport}
       onViewportChange={(nextViewport) => setViewport(nextViewport)}
     >
-      {wpApiResults.map((result) => (
-        <div key={result.id}>
+      {searchResults.map((result) => (
+        <div key={result.img}>
           <Marker
-            longitude={Number(
-              result["toolset-meta"]["field-group-for-stays"].long.raw
-            )}
-            latitude={Number(
-              result["toolset-meta"]["field-group-for-stays"].lat.raw
-            )}
+            longitude={Number(result.long)}
+            latitude={Number(result.lat)}
             offsetLeft={0}
             offsetTop={-20}
           >
@@ -49,18 +46,14 @@ function Map({ wpApiResults }) {
           </Marker>
 
           {/* The popup that should show if we click on a marker */}
-          {selectedLocation.id === result.id ? (
+          {selectedLocation.img === result.img ? (
             <Popup
               onClose={() => setSelectedLocation({})}
               closeOnClick={true}
-              latitude={Number(
-                result["toolset-meta"]["field-group-for-stays"].lat.raw
-              )}
-              longitude={Number(
-                result["toolset-meta"]["field-group-for-stays"].long.raw
-              )}
+              latitude={Number(result.lat)}
+              longitude={Number(result.long)}
             >
-              {result["toolset-meta"]["field-group-for-stays"].location.raw}
+              {result.location}
             </Popup>
           ) : (
             false

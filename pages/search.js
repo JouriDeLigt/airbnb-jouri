@@ -83,7 +83,7 @@ function Search({ searchResults, wpApiResults }) {
         </section>
 
         <section className="hidden xl:inline-flex xl:min-w-[600px]">
-          <Map wpApiResults={wpApiResults} />
+          <Map searchResults={searchResults} />
         </section>
       </main>
 
@@ -99,14 +99,9 @@ export async function getServerSideProps() {
     (res) => res.json()
   );
 
-  // const wpApiResults = await fetch(
-  //   "https://airbnb-clone.codeligtdev.nl/wp-json/wp/v2/stay"
-  // ).then((res) => res.json());
-
   return {
     props: {
       searchResults,
-      wpApiResults,
     },
   };
 }
